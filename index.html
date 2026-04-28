@@ -36,9 +36,9 @@ body.loading { overflow: hidden; }
 /* PRELOADER */
 .preloader { position: fixed; inset: 0; background: var(--charcoal); z-index: 9998; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 32px; transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), visibility 0.8s; }
 .preloader.done { opacity: 0; visibility: hidden; pointer-events: none; }
-.preloader-logo { font-family: var(--font-display); font-weight: 300; font-size: clamp(1.4rem, 3vw, 2rem); color: var(--gold); letter-spacing: 0.35em; text-transform: uppercase; opacity: 0; animation: plFade 1s 0.2s ease both; }
-.preloader-line { width: 80px; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: center; animation: plLine 1.5s 0.6s cubic-bezier(0.22,1,0.36,1) both; }
-.preloader-sub { font-family: var(--font-body); font-size: 0.65rem; color: var(--sand); letter-spacing: 0.4em; text-transform: uppercase; opacity: 0; animation: plFade 1s 0.9s ease both; }
+.preloader-logo { font-family: var(--font-display); font-weight: 300; font-size: clamp(1.4rem, 3vw, 2rem); color: var(--gold); letter-spacing: 0.35em; text-transform: uppercase; opacity: 0; animation: plFade 1.5s 0.4s ease both; }
+.preloader-line { width: 80px; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: center; animation: plLine 2s 1.0s cubic-bezier(0.22,1,0.36,1) both; }
+.preloader-sub { font-family: var(--font-body); font-size: 0.65rem; color: var(--sand); letter-spacing: 0.4em; text-transform: uppercase; opacity: 0; animation: plFade 1.5s 1.8s ease both; }
 @keyframes plFade { to { opacity: 1; } }
 @keyframes plLine { to { transform: scaleX(1); } }
 
@@ -372,7 +372,7 @@ window.addEventListener('load', function() {
   setTimeout(function() {
     document.getElementById('preloader').classList.add('done');
     document.body.classList.remove('loading');
-  }, 2200);
+  }, 4400);
 });
 
 var dot = document.getElementById('cursorDot');

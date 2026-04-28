@@ -132,9 +132,8 @@ body.loading { overflow: hidden; }
 .section-gallery { padding: 120px 24px 160px; background: radial-gradient(ellipse at 100% 100%, rgba(139,74,43,0.06) 0%, transparent 50%), var(--charcoal); }
 .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; max-width: 1200px; margin: 0 auto; }
 .gallery-card { position: relative; height: 420px; border-radius: 2px; overflow: hidden; cursor: pointer; }
-.gallery-card-bg { position: absolute; inset: -20px; background-size: cover; background-position: center; animation: kenBurns 25s ease-in-out infinite alternate; transition: transform 1.2s cubic-bezier(0.22,1,0.36,1); }
-.gallery-card:nth-child(2n) .gallery-card-bg { animation-direction: alternate-reverse; }
-.gallery-card:nth-child(3n) .gallery-card-bg { animation-duration: 30s; }
+.gallery-card-bg { position: absolute; inset: -20px; background-size: cover; background-position: center; transition: transform 1.2s cubic-bezier(0.22,1,0.36,1); }
+.gallery-card-bg video { width: 100%; height: 100%; object-fit: cover; }
 .gallery-card:hover .gallery-card-bg { transform: scale(1.08); }
 @keyframes kenBurns { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.1) translate(-8px, -6px); } }
 .gallery-card-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(15,12,8,0.88) 0%, rgba(15,12,8,0.2) 45%, rgba(15,12,8,0.05) 100%); opacity: 0.7; transition: opacity 0.6s; }
@@ -224,7 +223,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 </div>
 
 <section class="hero">
-  <video class="hero-video" autoplay muted loop playsinline>
+  <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="gallery-01-estate-enhanced.jpg">
     <source src="hero-video.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
@@ -300,12 +299,12 @@ textarea.input-field { resize: vertical; min-height: 100px; }
     <p class="body-text" style="font-size: 0.95rem; margin-bottom: 64px;">Each vista tells its own story — of ancient geology, thriving ecosystems, and unbroken wilderness.</p>
   </div>
   <div class="gallery-grid">
-    <div class="gallery-card reveal"><div class="gallery-card-bg" style="background-image: url('gallery-01-estate-enhanced.jpg');"></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">The Estate</h3><p class="gallery-card-desc">The homestead sits within rolling green pastures that sweep down to six kilometres of unspoilt private coastline.</p></div></div>
-    <div class="gallery-card reveal reveal-d1"><div class="gallery-card-bg" style="background-image: url('gallery-02-estuary-enhanced.jpg');"></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">River Estuary</h3><p class="gallery-card-desc">A rare river-to-sea landholding where the estuary widens into a vast tidal system teeming with birdlife and marine species.</p></div></div>
-    <div class="gallery-card reveal reveal-d2"><div class="gallery-card-bg" style="background-image: url('gallery-03-river-mouth-enhanced.jpg');"></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">River Mouth</h3><p class="gallery-card-desc">Where the river meets the Indian Ocean — turquoise channels carve through golden sand in patterns that shift with each tide.</p></div></div>
-    <div class="gallery-card reveal reveal-d3"><div class="gallery-card-bg" style="background-image: url('gallery-04-sandbars-enhanced.jpg');"></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">Ocean &amp; Sandbars</h3><p class="gallery-card-desc">Pristine sandbars and breaking surf along a coastline that remains untouched — no development, no crowds, no compromise.</p></div></div>
-    <div class="gallery-card reveal reveal-d4"><div class="gallery-card-bg" style="background-image: url('gallery-05-coastline-enhanced.jpg');"></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">Coastal Corridor</h3><p class="gallery-card-desc">Dense indigenous bush meets pristine beach in an unbroken corridor — the Eastern Cape's wild coast at its most dramatic.</p></div></div>
-    <div class="gallery-card reveal reveal-d5"><div class="gallery-card-bg" style="background-image: url('gallery-06-wide-estate-enhanced.jpg');"></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">Dunes &amp; River</h3><p class="gallery-card-desc">Sculpted dune fields meet the river channel — a landscape of extraordinary scale where land, water, and ocean converge.</p></div></div>
+    <div class="gallery-card reveal"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-01-estate-enhanced.jpg"><source src="clip-01-estate.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">The Estate</h3><p class="gallery-card-desc">The homestead sits within rolling green pastures that sweep down to six kilometres of unspoilt private coastline.</p></div></div>
+    <div class="gallery-card reveal reveal-d1"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-02-estuary-enhanced.jpg"><source src="clip-02-estuary.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">River Estuary</h3><p class="gallery-card-desc">A rare river-to-sea landholding where the estuary widens into a vast tidal system teeming with birdlife and marine species.</p></div></div>
+    <div class="gallery-card reveal reveal-d2"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-03-river-mouth-enhanced.jpg"><source src="clip-03-river-mouth.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">River Mouth</h3><p class="gallery-card-desc">Where the river meets the Indian Ocean — turquoise channels carve through golden sand in patterns that shift with each tide.</p></div></div>
+    <div class="gallery-card reveal reveal-d3"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-04-sandbars-enhanced.jpg"><source src="clip-04-sandbars.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">Ocean &amp; Sandbars</h3><p class="gallery-card-desc">Pristine sandbars and breaking surf along a coastline that remains untouched — no development, no crowds, no compromise.</p></div></div>
+    <div class="gallery-card reveal reveal-d4"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-05-coastline-enhanced.jpg"><source src="clip-05-coastline.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">Coastal Corridor</h3><p class="gallery-card-desc">Dense indigenous bush meets pristine beach in an unbroken corridor — the Eastern Cape's wild coast at its most dramatic.</p></div></div>
+    <div class="gallery-card reveal reveal-d5"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-06-wide-estate-enhanced.jpg"><source src="clip-06-dunes.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">Dunes &amp; River</h3><p class="gallery-card-desc">Sculpted dune fields meet the river channel — a landscape of extraordinary scale where land, water, and ocean converge.</p></div></div>
   </div>
 </section>
 
@@ -407,6 +406,19 @@ var observer = new IntersectionObserver(function(entries) {
 }, { threshold: 0.15 });
 document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
 
+// Lazy-load gallery videos: play when visible, pause when not
+var vidObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    var vid = entry.target;
+    if (entry.isIntersecting) {
+      vid.play().catch(function() {});
+    } else {
+      vid.pause();
+    }
+  });
+}, { threshold: 0.25 });
+document.querySelectorAll('.gallery-card-bg video').forEach(function(v) { vidObserver.observe(v); });
+
 var mobileMenu = document.getElementById('mobileMenu');
 document.getElementById('menuOpen').addEventListener('click', function() { mobileMenu.classList.add('open'); });
 document.getElementById('menuClose').addEventListener('click', function() { mobileMenu.classList.remove('open'); });
@@ -414,6 +426,36 @@ mobileMenu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click
 
 var soundBtn = document.getElementById('soundToggle');
 var heroVideo = document.querySelector('.hero-video');
+
+// Ensure muted property is set (some browsers ignore the HTML attribute)
+heroVideo.muted = true;
+heroVideo.setAttribute('muted', '');
+heroVideo.setAttribute('playsinline', '');
+
+function tryPlay() {
+  var p = heroVideo.play();
+  if (p !== undefined) {
+    p.catch(function() {
+      // Still blocked — play on first user interaction
+      ['click','touchstart','scroll'].forEach(function(evt) {
+        document.addEventListener(evt, function handler() {
+          heroVideo.muted = true;
+          heroVideo.play();
+          ['click','touchstart','scroll'].forEach(function(e) {
+            document.removeEventListener(e, handler);
+          });
+        }, { once: true });
+      });
+    });
+  }
+}
+
+if (heroVideo.readyState >= 2) {
+  tryPlay();
+} else {
+  heroVideo.addEventListener('loadeddata', tryPlay);
+}
+
 soundBtn.addEventListener('click', function() { heroVideo.muted = !heroVideo.muted; soundBtn.classList.toggle('unmuted', !heroVideo.muted); });
 
 document.getElementById('submitBtn').addEventListener('click', function() {

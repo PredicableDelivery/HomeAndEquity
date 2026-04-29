@@ -591,6 +591,9 @@ a, button, .gallery-card, .btn-submit, .feature-card, select { cursor: pointer; 
 
 <!-- ═══ SOUND TOGGLE ═══ -->
 <button class="sound-toggle" id="soundToggle">Sound Off</button>
+<audio id="ambientAudio" loop preload="auto">
+  <source src="ambient.mp3" type="audio/mpeg">
+</audio>
 
 <!-- ═══════════════════════════════════════════════
      HERO
@@ -1103,15 +1106,18 @@ mobileMenu.querySelectorAll('a').forEach(function(a) {
   a.addEventListener('click', function() { mobileMenu.classList.remove('open'); });
 });
 
-// ── Sound toggle ──
+// ── Sound toggle (ambient audio) ──
 var soundBtn = document.getElementById('soundToggle');
+var ambientAudio = document.getElementById('ambientAudio');
 var heroVideo = document.querySelector('.hero-video');
+var audioPlaying = false;
 
+// Keep hero video always muted
 heroVideo.muted = true;
 heroVideo.setAttribute('muted', '');
 heroVideo.setAttribute('playsinline', '');
 
-function tryPlay() {
+function tryPlayVideo() {
   var p = heroVideo.play();
   if (p !== undefined) {
     p.catch(function() {
@@ -1128,13 +1134,44 @@ function tryPlay() {
   }
 }
 
-if (heroVideo.readyState >= 2) { tryPlay(); }
-else { heroVideo.addEventListener('loadeddata', tryPlay); }
+if (heroVideo.readyState >= 2) { tryPlayVideo(); }
+else { heroVideo.addEventListener('loadeddata', tryPlayVideo); }
+
+// Ambient audio with volume fade
+ambientAudio.volume = 0;
+
+function fadeAudioIn() {
+  ambientAudio.play().then(function() {
+    audioPlaying = true;
+    soundBtn.classList.add('unmuted');
+    soundBtn.textContent = 'Sound On';
+    var vol = 0;
+    var fadeIn = setInterval(function() {
+      vol = Math.min(vol + 0.05, 0.6);
+      ambientAudio.volume = vol;
+      if (vol >= 0.6) clearInterval(fadeIn);
+    }, 80);
+  }).catch(function() {});
+}
+
+function fadeAudioOut() {
+  var vol = ambientAudio.volume;
+  var fadeOut = setInterval(function() {
+    vol = Math.max(vol - 0.05, 0);
+    ambientAudio.volume = vol;
+    if (vol <= 0) {
+      clearInterval(fadeOut);
+      ambientAudio.pause();
+      audioPlaying = false;
+      soundBtn.classList.remove('unmuted');
+      soundBtn.textContent = 'Sound Off';
+    }
+  }, 60);
+}
 
 soundBtn.addEventListener('click', function() {
-  heroVideo.muted = !heroVideo.muted;
-  soundBtn.classList.toggle('unmuted', !heroVideo.muted);
-  soundBtn.textContent = heroVideo.muted ? 'Sound Off' : 'Sound On';
+  if (audioPlaying) { fadeAudioOut(); }
+  else { fadeAudioIn(); }
 });
 
 // ── Form submit ──

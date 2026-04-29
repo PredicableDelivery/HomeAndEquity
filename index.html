@@ -3,17 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Private Land Offering — South Africa</title>
-<meta name="description" content="An extraordinary parcel of untamed South African wilderness — yours to shape into legacy.">
+<title>Where Bush Meets the Sea — Gamtoos Coast, South Africa</title>
+<meta name="description" content="1,433 hectares of pristine coastal wilderness between the Kabeljous and Gamtoos estuaries. Six ecosystems. 99% intact. A once-in-a-generation land offering in South Africa's Eastern Cape.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --charcoal: #0f0c08; --dark: #1a1611; --earth: #2a2219; --brown: #3d3225;
-  --gold: #c4a265; --gold-light: #d4b87a; --sand: #b8a78e;
-  --cream: #f0e8db; --cream-light: #f7f2ea;
-  --olive: #4a5a3a; --olive-dark: #2d3a22; --rust: #8b4a2b;
+  --charcoal: #0f0c08;
+  --dark: #1a1611;
+  --earth: #2a2219;
+  --brown: #3d3225;
+  --gold: #c4a265;
+  --gold-light: #d4b87a;
+  --sand: #b8a78e;
+  --cream: #f0e8db;
+  --cream-light: #f7f2ea;
+  --olive: #4a5a3a;
+  --olive-dark: #2d3a22;
+  --rust: #8b4a2b;
+  --ocean: #1a3a4a;
+  --ocean-light: #2a5a6a;
+  --ocean-deep: #0d2530;
+  --sunset: #c47a3a;
+  --amber: #d4943a;
   --font-display: 'Cormorant Garamond', 'Georgia', serif;
   --font-body: 'Jost', 'Helvetica Neue', sans-serif;
 }
@@ -23,376 +36,1046 @@ body { background: var(--charcoal); color: var(--cream); overflow-x: hidden; -we
 body.loading { overflow: hidden; }
 ::selection { background: var(--gold); color: var(--charcoal); }
 
-/* CUSTOM CURSOR */
-.cursor-dot, .cursor-ring { display: none; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 10000; border-radius: 50%; }
-@media (hover: hover) and (pointer: fine) {
-  body { cursor: none; }
-  a, button, .gallery-card, .btn, .nav-link, .sound-toggle, select, .feature-card { cursor: none; }
-  .cursor-dot { display: block; width: 6px; height: 6px; background: var(--gold); }
-  .cursor-ring { display: block; width: 36px; height: 36px; border: 1px solid rgba(196,162,101,0.4); transition: width 0.2s, height 0.2s, border-color 0.2s; margin-left: -15px; margin-top: -15px; }
-  .cursor-ring.hovering { width: 56px; height: 56px; margin-left: -25px; margin-top: -25px; border-color: var(--gold); }
+/* ═══ PRELOADER ═══ */
+.preloader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--charcoal);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+.preloader.done { opacity: 0; visibility: hidden; pointer-events: none; }
+.preloader-brand {
+  font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 300; color: var(--gold); letter-spacing: 0.15em;
+  text-transform: uppercase; opacity: 0;
+  animation: preloaderFade 2s ease forwards;
+}
+.preloader-sub {
+  font-family: var(--font-body); font-size: 0.65rem; color: var(--sand);
+  letter-spacing: 0.4em; text-transform: uppercase; margin-top: 16px;
+  opacity: 0; animation: preloaderFade 2s ease 0.4s forwards;
+}
+.preloader-line {
+  width: 60px; height: 1px; background: var(--gold); margin-top: 32px;
+  transform: scaleX(0); animation: preloaderLine 1.8s ease 0.2s forwards;
+}
+@keyframes preloaderFade { to { opacity: 1; } }
+@keyframes preloaderLine { to { transform: scaleX(1); } }
+
+/* ═══ CUSTOM CURSOR — removed, using system default ═══ */
+a, button, .gallery-card, .btn-submit, .feature-card, select { cursor: pointer; }
+.nav-link { position: relative; }
+.nav-link::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+  height: 1px; background: var(--gold); transform: scaleX(0);
+  transition: transform 0.3s ease; transform-origin: right;
+}
+.nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+/* ═══ NAV ═══ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 24px 40px; display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.4s, padding 0.4s, backdrop-filter 0.4s;
+}
+.nav.scrolled {
+  background: rgba(15,12,8,0.85); backdrop-filter: blur(12px);
+  padding: 16px 40px;
+}
+.nav-brand {
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 400;
+  color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase;
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 36px; align-items: center; }
+.nav-link {
+  font-family: var(--font-body); font-size: 0.68rem; font-weight: 300;
+  color: var(--sand); letter-spacing: 0.2em; text-transform: uppercase;
+  text-decoration: none; transition: color 0.3s;
+}
+.nav-link:hover { color: var(--gold); }
+.nav-burger {
+  display: none; background: none; border: none; padding: 8px;
+  flex-direction: column; gap: 5px;
+}
+.nav-burger span { display: block; width: 24px; height: 1px; background: var(--gold); }
+
+/* ═══ MOBILE MENU ═══ */
+.mobile-menu {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(15,12,8,0.97); backdrop-filter: blur(20px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+  opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s;
+}
+.mobile-menu.open { opacity: 1; visibility: visible; }
+.mobile-menu a {
+  font-family: var(--font-display); font-size: 1.8rem; font-weight: 300;
+  color: var(--cream); text-decoration: none; letter-spacing: 0.08em;
+  transition: color 0.3s;
+}
+.mobile-menu a:hover { color: var(--gold); }
+.mobile-menu-close {
+  position: absolute; top: 24px; right: 40px;
+  background: none; border: none; color: var(--gold);
+  font-size: 2rem; font-weight: 300; line-height: 1;
 }
 
-/* PRELOADER */
-.preloader { position: fixed; inset: 0; background: var(--charcoal); z-index: 9998; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 32px; transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), visibility 0.8s; }
-.preloader.done { opacity: 0; visibility: hidden; pointer-events: none; }
-.preloader-logo { font-family: var(--font-display); font-weight: 300; font-size: clamp(1.4rem, 3vw, 2rem); color: var(--gold); letter-spacing: 0.35em; text-transform: uppercase; opacity: 0; animation: plFade 1.5s 0.4s ease both; }
-.preloader-line { width: 80px; height: 1px; background: var(--gold); transform: scaleX(0); transform-origin: center; animation: plLine 2s 1.0s cubic-bezier(0.22,1,0.36,1) both; }
-.preloader-sub { font-family: var(--font-body); font-size: 0.65rem; color: var(--sand); letter-spacing: 0.4em; text-transform: uppercase; opacity: 0; animation: plFade 1.5s 1.8s ease both; }
-@keyframes plFade { to { opacity: 1; } }
-@keyframes plLine { to { transform: scaleX(1); } }
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-burger { display: flex; }
+}
 
-/* GRAIN */
-.grain { position: fixed; inset: 0; pointer-events: none; z-index: 9997; opacity: 0.035; mix-blend-mode: multiply; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 128px 128px; }
+/* ═══ SOUND TOGGLE ═══ */
+.sound-toggle {
+  position: fixed; bottom: 32px; right: 32px; z-index: 90;
+  background: rgba(15,12,8,0.6); border: 1px solid rgba(196,162,101,0.2);
+  color: var(--sand); font-family: var(--font-body); font-size: 0.6rem;
+  letter-spacing: 0.2em; text-transform: uppercase; padding: 10px 16px;
+  backdrop-filter: blur(8px); transition: all 0.3s;
+}
+.sound-toggle:hover { border-color: var(--gold); color: var(--gold); }
+.sound-toggle.unmuted { border-color: var(--gold); color: var(--gold); }
 
-/* REVEAL */
-.reveal { opacity: 0; transform: translateY(48px); transition: opacity 1.2s cubic-bezier(0.22,1,0.36,1), transform 1.2s cubic-bezier(0.22,1,0.36,1); }
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.reveal-d1 { transition-delay: 0.1s; } .reveal-d2 { transition-delay: 0.2s; }
-.reveal-d3 { transition-delay: 0.3s; } .reveal-d4 { transition-delay: 0.4s; }
-.reveal-d5 { transition-delay: 0.5s; }
+/* ═══ HERO ═══ */
+.hero {
+  position: relative; height: 100vh; min-height: 600px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.hero-video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(15,12,8,0.2) 0%, rgba(15,12,8,0.1) 40%, rgba(15,12,8,0.5) 80%, var(--charcoal) 100%),
+    radial-gradient(ellipse at center, transparent 30%, rgba(15,12,8,0.4) 100%);
+}
+.hero-grain {
+  position: absolute; inset: 0; opacity: 0.04; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.hero-content {
+  position: relative; z-index: 2; text-align: center; padding: 0 24px;
+  max-width: 1000px;
+}
+.hero-title {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(2.8rem, 7vw, 6.5rem);
+  line-height: 1.05; color: var(--cream-light); letter-spacing: 0.01em;
+  text-shadow: 0 2px 40px rgba(0,0,0,0.5), 0 1px 8px rgba(0,0,0,0.3);
+  opacity: 0; animation: heroFadeUp 1.5s ease 2.4s forwards;
+}
+.hero-sub {
+  font-family: var(--font-body); font-size: 0.7rem; font-weight: 300;
+  color: var(--gold); letter-spacing: 0.35em; text-transform: uppercase;
+  margin-top: 28px; opacity: 0;
+  animation: heroFadeUp 1.5s ease 2.8s forwards;
+}
+.hero-stats {
+  display: flex; justify-content: center; gap: 48px; margin-top: 48px;
+  opacity: 0; animation: heroFadeUp 1.5s ease 3.1s forwards;
+}
+.hero-stat-num {
+  font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 300; color: var(--gold); line-height: 1;
+}
+.hero-stat-label {
+  font-family: var(--font-body); font-size: 0.58rem; font-weight: 300;
+  color: var(--sand); letter-spacing: 0.25em; text-transform: uppercase;
+  margin-top: 8px;
+}
+.hero-scroll {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  z-index: 2; opacity: 0; animation: heroFadeUp 1.5s ease 3.4s forwards;
+}
+.hero-scroll span {
+  display: block; width: 1px; height: 48px;
+  background: linear-gradient(to bottom, transparent, var(--gold));
+  animation: scrollPulse 2s ease infinite;
+}
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; } 50% { opacity: 1; }
+}
 
-/* NAV */
-.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 24px 48px; display: flex; align-items: center; justify-content: space-between; transition: background 0.5s, backdrop-filter 0.5s, border-color 0.5s; border-bottom: 1px solid transparent; }
-.nav.scrolled { background: rgba(15,12,8,0.92); backdrop-filter: blur(12px); border-bottom-color: rgba(196,162,101,0.08); }
-.nav-wordmark { text-decoration: none; display: flex; align-items: center; gap: 14px; }
-.nav-wordmark-mark { font-family: var(--font-display); font-size: 0.7rem; font-weight: 400; color: var(--gold); letter-spacing: 0.4em; text-transform: uppercase; border: 1px solid rgba(196,162,101,0.3); padding: 6px 12px; transition: border-color 0.4s; }
-.nav-wordmark:hover .nav-wordmark-mark { border-color: var(--gold); }
-.nav-wordmark-text { font-family: var(--font-display); font-size: 0.7rem; font-weight: 400; color: var(--sand); letter-spacing: 0.3em; text-transform: uppercase; transition: color 0.3s; }
-.nav-wordmark:hover .nav-wordmark-text { color: var(--cream); }
-.nav-links { display: flex; gap: 40px; }
-.nav-link { color: var(--sand); text-decoration: none; font-family: var(--font-body); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.3em; text-transform: uppercase; transition: color 0.3s; position: relative; }
-.nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width 0.4s cubic-bezier(0.22,1,0.36,1); }
-.nav-link:hover { color: var(--gold); }
-.nav-link:hover::after { width: 100%; }
-.nav-hamburger { display: none; background: none; border: none; color: var(--gold); font-size: 1.4rem; cursor: pointer; }
-
-/* MOBILE MENU */
-.menu-overlay { position: fixed; inset: 0; background: rgba(15,12,8,0.97); z-index: 1000; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 32px; }
-.menu-overlay.open { display: flex; }
-.menu-overlay a { font-family: var(--font-display); font-size: 2.5rem; font-weight: 300; color: var(--cream); text-decoration: none; transition: color 0.3s; letter-spacing: 0.03em; animation: slideDown 0.5s ease both; }
-.menu-overlay a:nth-child(2) { animation-delay: 0.1s; } .menu-overlay a:nth-child(3) { animation-delay: 0.2s; }
-.menu-overlay a:nth-child(4) { animation-delay: 0.3s; } .menu-overlay a:nth-child(5) { animation-delay: 0.4s; }
-.menu-overlay a:hover { color: var(--gold); }
-.menu-close { position: absolute; top: 28px; right: 48px; background: none; border: none; color: var(--gold); font-size: 1.6rem; cursor: pointer; }
-@keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-
-/* HERO */
-.hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; overflow: hidden; background: var(--charcoal); }
-.hero-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); object-fit: cover; z-index: 0; }
-.hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to bottom, rgba(15,12,8,0.45) 0%, rgba(15,12,8,0.25) 35%, rgba(15,12,8,0.3) 65%, rgba(15,12,8,0.85) 100%); }
-.hero-vignette { position: absolute; inset: 0; z-index: 1; background: radial-gradient(ellipse at center, transparent 50%, rgba(15,12,8,0.6) 100%); }
-.hero-top-line { position: absolute; top: 0; left: 50%; width: 1px; height: 120px; background: linear-gradient(to bottom, var(--gold), transparent); opacity: 0.3; z-index: 2; }
-.hero-content { position: relative; z-index: 2; text-align: center; padding: 0 24px; }
-.hero-badge { font-family: var(--font-display); font-size: 1.3rem; color: var(--gold); letter-spacing: 0.6em; text-transform: uppercase; margin-bottom: 48px; animation: breathe 4s ease-in-out infinite; }
-.hero-title { font-family: var(--font-display); font-weight: 300; font-size: clamp(2.8rem, 7vw, 6.5rem); line-height: 1.05; color: var(--cream-light); letter-spacing: 0.01em; max-width: 900px; margin: 0 auto; text-shadow: 0 2px 40px rgba(0,0,0,0.5), 0 1px 8px rgba(0,0,0,0.3); }
-.hero-subtitle { font-family: var(--font-body); font-weight: 300; font-size: 1.1rem; color: var(--cream); max-width: 560px; margin: 0 auto; line-height: 1.8; letter-spacing: 0.02em; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
-.hero-bottom-grad { position: absolute; bottom: 0; left: 0; right: 0; height: 200px; z-index: 2; background: linear-gradient(to top, var(--charcoal), transparent); }
-.hero-scroll { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; animation: breathe 3s ease-in-out infinite; }
-.hero-scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, transparent, var(--gold)); }
-.sound-toggle { position: absolute; bottom: 40px; right: 48px; z-index: 3; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(196,162,101,0.4); background: rgba(15,12,8,0.5); backdrop-filter: blur(8px); color: var(--gold); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.4s; }
-.sound-toggle:hover { border-color: var(--gold); background: rgba(196,162,101,0.15); }
-.sound-toggle .bar { position: absolute; width: 60%; height: 1px; background: var(--gold); transform: rotate(-45deg); transition: opacity 0.3s; }
-.sound-toggle.unmuted .bar { opacity: 0; }
-@keyframes breathe { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
-
-/* SHARED */
-.rule { width: 80px; height: 1px; background: var(--gold); margin: 24px auto; }
-.rule-sm { width: 60px; }
-.section-heading { font-family: var(--font-display); font-weight: 300; font-size: clamp(2rem, 4vw, 3.5rem); color: var(--cream); letter-spacing: 0.02em; text-align: center; }
-.body-text { font-family: var(--font-body); font-weight: 300; font-size: 1.05rem; line-height: 1.9; color: var(--sand); max-width: 680px; margin: 0 auto; text-align: center; }
-.divider-ornament { display: flex; align-items: center; justify-content: center; gap: 16px; color: var(--gold); opacity: 0.5; font-size: 0.6rem; letter-spacing: 0.5em; }
+/* ═══ SECTIONS ═══ */
+.section-heading {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  text-align: center; color: var(--cream-light);
+  letter-spacing: 0.02em; line-height: 1.15;
+}
+.rule {
+  width: 60px; height: 1px; background: var(--gold);
+  margin: 28px auto 40px; opacity: 0.6;
+}
+.body-text {
+  font-family: var(--font-body); font-size: 0.92rem; font-weight: 300;
+  color: var(--sand); max-width: 680px; margin: 0 auto;
+  line-height: 1.85; text-align: center; letter-spacing: 0.02em;
+}
+.divider-ornament {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  font-family: var(--font-display); font-size: 0.9rem; color: var(--gold); opacity: 0.5;
+}
 .divider-ornament-line { width: 40px; height: 1px; background: var(--gold); }
-.btn { display: inline-block; padding: 18px 56px; border: 1px solid var(--gold); background: transparent; color: var(--gold); font-family: var(--font-body); font-size: 0.75rem; font-weight: 400; letter-spacing: 0.35em; text-transform: uppercase; cursor: pointer; text-decoration: none; position: relative; overflow: hidden; transition: color 0.5s; }
-.btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--gold); transition: left 0.5s cubic-bezier(0.22,1,0.36,1); z-index: 0; }
-.btn:hover::before { left: 0; } .btn:hover { color: var(--charcoal); }
-.btn span { position: relative; z-index: 1; }
 
-/* STORY */
-.section-story { padding: 160px 24px; background: var(--charcoal); }
-.story-text { font-family: var(--font-display); font-weight: 300; font-size: 1.15rem; line-height: 2.1; font-style: italic; color: var(--sand); max-width: 680px; margin: 0 auto; text-align: center; }
+/* ═══ PARALLAX BLOCKS ═══ */
+.parallax {
+  position: relative; min-height: 50vh;
+  display: flex; align-items: center; justify-content: center;
+  background-size: cover; background-position: center; background-attachment: fixed;
+  overflow: hidden;
+}
+.parallax-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(15,12,8,0.5), rgba(15,12,8,0.7));
+}
+.parallax-content { position: relative; z-index: 2; text-align: center; padding: 80px 24px; }
 
-/* PARALLAX */
-.parallax { position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; background-attachment: fixed; background-size: cover; background-position: center; }
-.parallax-quote { font-family: var(--font-display); font-weight: 300; font-style: italic; font-size: clamp(1.5rem, 3vw, 2.2rem); color: var(--cream); max-width: 700px; line-height: 1.6; text-align: center; padding: 0 24px; }
-.parallax-attr { font-family: var(--font-body); font-size: 0.7rem; color: var(--gold); letter-spacing: 0.3em; text-transform: uppercase; margin-top: 20px; text-align: center; }
+/* ═══ FEATURE CARDS ═══ */
+.features-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  max-width: 1100px; margin: 64px auto 0;
+}
+.feature-card {
+  background: rgba(26,22,17,0.6); border: 1px solid rgba(196,162,101,0.06);
+  padding: 48px 36px; text-align: center;
+  transition: background 0.4s, border-color 0.4s;
+}
+.feature-card:hover { background: rgba(42,34,25,0.6); border-color: rgba(196,162,101,0.15); }
+.feature-card-icon {
+  font-family: var(--font-display); font-size: 1.8rem;
+  color: var(--gold); margin-bottom: 20px; opacity: 0.7;
+}
+.feature-card-title {
+  font-family: var(--font-display); font-size: 1.35rem;
+  font-weight: 400; color: var(--cream); margin-bottom: 16px;
+}
+.feature-card-desc {
+  font-family: var(--font-body); font-size: 0.78rem; font-weight: 300;
+  color: var(--sand); line-height: 1.75; letter-spacing: 0.015em;
+}
 
-/* FEATURES */
-.section-features { padding: 160px 24px; background: radial-gradient(ellipse at 0% 0%, rgba(74,90,58,0.08) 0%, transparent 50%), var(--charcoal); }
-.features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; max-width: 960px; margin: 64px auto 0; }
-.feature-card { padding: 48px 36px; border: 1px solid rgba(196,162,101,0.12); background: rgba(26,22,17,0.6); backdrop-filter: blur(10px); transition: all 0.5s cubic-bezier(0.22,1,0.36,1); position: relative; overflow: hidden; }
-.feature-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0; transition: opacity 0.5s; }
-.feature-card:hover { border-color: rgba(196,162,101,0.3); transform: translateY(-4px); background: rgba(26,22,17,0.85); }
-.feature-card:hover::before { opacity: 1; }
-.feature-icon { font-family: var(--font-display); font-size: 1.8rem; color: var(--gold); margin-bottom: 20px; opacity: 0.7; }
-.feature-title { font-family: var(--font-display); font-size: 1.35rem; font-weight: 400; color: var(--cream); margin-bottom: 16px; letter-spacing: 0.02em; }
-.feature-desc { font-family: var(--font-body); font-size: 0.92rem; font-weight: 300; color: var(--sand); line-height: 1.8; }
+/* ═══ SPECIES BADGE ═══ */
+.species-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
+  max-width: 1100px; margin: 48px auto 0;
+}
+.species-card {
+  position: relative; overflow: hidden;
+  background: rgba(26,22,17,0.6); border: 1px solid rgba(196,162,101,0.06);
+  cursor: pointer; transition: border-color 0.4s;
+}
+.species-card:hover { border-color: rgba(196,162,101,0.2); }
+.species-card-img {
+  width: 100%; aspect-ratio: 4/3; object-fit: cover;
+  filter: brightness(0.85); transition: filter 0.5s, transform 6s ease;
+}
+.species-card:hover .species-card-img { filter: brightness(0.7); transform: scale(1.05); }
+.species-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(15,12,8,0.9) 0%, rgba(15,12,8,0.3) 50%, transparent 100%);
+  pointer-events: none;
+}
+.species-card-header {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 24px 20px; z-index: 2;
+}
+.species-card-name {
+  font-family: var(--font-display); font-size: 1.2rem; font-weight: 400;
+  color: var(--cream); margin-bottom: 4px;
+}
+.species-card-latin {
+  font-family: var(--font-display); font-size: 0.82rem; font-style: italic;
+  color: var(--sand); opacity: 0.7;
+}
+.species-card-status {
+  font-family: var(--font-body); font-size: 0.58rem; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase; margin-top: 8px;
+}
+.species-card-expand-icon {
+  position: absolute; top: 16px; right: 16px; z-index: 2;
+  font-family: var(--font-display); font-size: 1.4rem; color: var(--gold);
+  opacity: 0.5; transition: opacity 0.3s, transform 0.3s;
+  line-height: 1;
+}
+.species-card:hover .species-card-expand-icon { opacity: 1; }
+.species-card.expanded .species-card-expand-icon { transform: rotate(45deg); }
 
-/* GALLERY + KEN BURNS */
-.section-gallery { padding: 120px 24px 160px; background: radial-gradient(ellipse at 100% 100%, rgba(139,74,43,0.06) 0%, transparent 50%), var(--charcoal); }
-.gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; max-width: 1200px; margin: 0 auto; }
-.gallery-card { position: relative; height: 420px; border-radius: 2px; overflow: hidden; cursor: pointer; }
-.gallery-card-bg { position: absolute; inset: -20px; background-size: cover; background-position: center; transition: transform 1.2s cubic-bezier(0.22,1,0.36,1); }
-.gallery-card-bg video { width: 100%; height: 100%; object-fit: cover; }
+.species-card-detail {
+  max-height: 0; overflow: hidden; transition: max-height 0.5s ease, padding 0.3s ease;
+  padding: 0 20px;
+  background: rgba(15,12,8,0.95);
+}
+.species-card.expanded .species-card-detail {
+  max-height: 300px; padding: 20px;
+}
+.species-card-desc {
+  font-family: var(--font-body); font-size: 0.78rem; font-weight: 300;
+  color: var(--sand); line-height: 1.75;
+}
+.species-card-meta {
+  font-family: var(--font-body); font-size: 0.62rem; font-weight: 400;
+  color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase;
+  margin-top: 12px; opacity: 0.7;
+}
+
+/* Plant species compact list */
+.flora-list {
+  max-width: 900px; margin: 64px auto 0;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 32px;
+}
+.flora-item {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(196,162,101,0.06);
+}
+.flora-name {
+  font-family: var(--font-display); font-size: 0.92rem; font-style: italic;
+  color: var(--cream);
+}
+.flora-status {
+  font-family: var(--font-body); font-size: 0.58rem; font-weight: 400;
+  letter-spacing: 0.15em; text-transform: uppercase; flex-shrink: 0; margin-left: 12px;
+}
+
+@media (max-width: 900px) {
+  .species-cards { grid-template-columns: repeat(2, 1fr); }
+  .flora-list { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .species-cards { grid-template-columns: 1fr; }
+}
+
+/* ═══ GALLERY ═══ */
+.gallery-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
+  max-width: 1200px; margin: 0 auto;
+}
+.gallery-card {
+  position: relative; aspect-ratio: 4/3; overflow: hidden;
+}
+.gallery-card-bg {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  transition: transform 8s ease;
+}
+.gallery-card-bg video {
+  width: 100%; height: 100%; object-fit: cover;
+}
 .gallery-card:hover .gallery-card-bg { transform: scale(1.08); }
-@keyframes kenBurns { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.1) translate(-8px, -6px); } }
-.gallery-card-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(15,12,8,0.88) 0%, rgba(15,12,8,0.2) 45%, rgba(15,12,8,0.05) 100%); opacity: 0.7; transition: opacity 0.6s; }
-.gallery-card:hover .gallery-card-overlay { opacity: 1; }
-.gallery-card-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 40px 32px; z-index: 2; transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); }
-.gallery-card:hover .gallery-card-content { transform: translateY(-8px); }
-.gallery-card-title { font-family: var(--font-display); font-size: 1.5rem; color: var(--cream); letter-spacing: 0.03em; }
-.gallery-card-desc { font-family: var(--font-body); font-size: 0.9rem; color: var(--sand); margin-top: 12px; line-height: 1.7; max-height: 0; overflow: hidden; opacity: 0; transition: all 0.6s cubic-bezier(0.22,1,0.36,1); }
+.gallery-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(15,12,8,0.85) 0%, rgba(15,12,8,0.2) 50%, transparent 100%);
+  transition: background 0.4s;
+}
+.gallery-card:hover .gallery-card-overlay {
+  background: linear-gradient(to top, rgba(15,12,8,0.9) 0%, rgba(15,12,8,0.4) 60%, rgba(15,12,8,0.2) 100%);
+}
+.gallery-card-content {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 28px 24px; z-index: 2;
+}
+.gallery-card-title {
+  font-family: var(--font-display); font-size: 1.3rem; font-weight: 400;
+  color: var(--cream); margin-bottom: 8px;
+}
+.gallery-card-desc {
+  font-family: var(--font-body); font-size: 0.72rem; font-weight: 300;
+  color: var(--sand); line-height: 1.65;
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.4s ease;
+}
 .gallery-card:hover .gallery-card-desc { max-height: 120px; opacity: 1; }
 
-/* DETAILS */
-.section-details { padding: 160px 24px; background: linear-gradient(to bottom, var(--charcoal), var(--dark)); }
-.details-table { max-width: 700px; margin: 64px auto 0; border: 1px solid rgba(196,162,101,0.1); background: rgba(26,22,17,0.4); }
-.details-row { display: flex; justify-content: space-between; align-items: baseline; padding: 20px 36px; border-bottom: 1px solid rgba(196,162,101,0.06); gap: 24px; flex-wrap: wrap; }
-.details-row:last-child { border-bottom: none; }
-.details-label { font-family: var(--font-body); font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); font-weight: 400; flex-shrink: 0; }
-.details-value { font-family: var(--font-display); font-size: 1.05rem; color: var(--sand); font-weight: 300; text-align: right; }
-.details-note { font-family: var(--font-body); font-size: 0.8rem; color: rgba(184,167,142,0.5); text-align: center; margin-top: 32px; letter-spacing: 0.05em; }
+/* ═══ HERITAGE TIMELINE ═══ */
+.heritage-items {
+  max-width: 700px; margin: 48px auto 0;
+  display: flex; flex-direction: column; gap: 36px;
+}
+.heritage-item {
+  display: flex; gap: 28px; align-items: flex-start;
+}
+.heritage-marker {
+  width: 1px; min-height: 48px; background: rgba(196,162,101,0.3);
+  position: relative; flex-shrink: 0; margin-left: 8px;
+}
+.heritage-marker::before {
+  content: ''; position: absolute; top: 0; left: -3px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--gold); opacity: 0.6;
+}
+.heritage-era {
+  font-family: var(--font-body); font-size: 0.6rem; font-weight: 400;
+  color: var(--gold); letter-spacing: 0.25em; text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.heritage-desc {
+  font-family: var(--font-body); font-size: 0.85rem; font-weight: 300;
+  color: var(--sand); line-height: 1.75;
+}
 
-/* CONTACT FORM */
-.section-contact { padding: 160px 24px; background: var(--charcoal); }
-.contact-form { max-width: 560px; margin: 64px auto 0; display: flex; flex-direction: column; gap: 32px; }
-.input-field { width: 100%; padding: 16px 0; background: transparent; border: none; border-bottom: 1px solid rgba(196,162,101,0.25); color: var(--cream); font-family: var(--font-body); font-size: 1rem; font-weight: 300; outline: none; transition: border-color 0.3s; }
-.input-field:focus { border-color: var(--gold); }
-.input-field::placeholder { color: rgba(184,167,142,0.5); letter-spacing: 0.1em; font-size: 0.8rem; text-transform: uppercase; }
-textarea.input-field { resize: vertical; min-height: 100px; }
-.select-field { width: 100%; padding: 16px 0; background: transparent; border: none; border-bottom: 1px solid rgba(196,162,101,0.25); color: var(--cream); font-family: var(--font-body); font-size: 1rem; font-weight: 300; outline: none; transition: border-color 0.3s; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c4a265' stroke-width='1' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 4px center; cursor: pointer; }
-.select-field:focus { border-color: var(--gold); }
-.select-field option { background: var(--dark); color: var(--cream); font-family: var(--font-body); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+/* ═══ FORM ═══ */
+.form-section {
+  padding: 120px 24px 80px;
+  background: linear-gradient(to bottom, var(--charcoal), rgba(26,22,17,0.8));
+}
+.form-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  max-width: 640px; margin: 48px auto 0;
+}
+.form-field {
+  display: flex; flex-direction: column;
+}
+.form-field.full { grid-column: 1 / -1; }
+.form-label {
+  font-family: var(--font-body); font-size: 0.6rem; font-weight: 400;
+  color: var(--gold); letter-spacing: 0.25em; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.form-input, .form-select, .form-textarea {
+  background: rgba(26,22,17,0.6); border: 1px solid rgba(196,162,101,0.12);
+  color: var(--cream); font-family: var(--font-body); font-size: 0.85rem;
+  font-weight: 300; padding: 14px 18px;
+  transition: border-color 0.3s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none; border-color: var(--gold);
+}
+.form-textarea { resize: vertical; min-height: 100px; }
+.form-select { appearance: none; }
+.btn-submit {
+  grid-column: 1 / -1;
+  background: transparent; border: 1px solid var(--gold);
+  color: var(--gold); font-family: var(--font-body); font-size: 0.7rem;
+  font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase;
+  padding: 18px 48px; margin-top: 16px; transition: all 0.4s;
+  justify-self: center;
+}
+.btn-submit:hover { background: var(--gold); color: var(--charcoal); }
 
-/* FOOTER */
-.footer { padding: 80px 24px 48px; text-align: center; border-top: 1px solid rgba(196,162,101,0.08); background: var(--charcoal); }
-.footer-title { font-family: var(--font-display); font-size: 0.65rem; color: rgba(184,167,142,0.3); letter-spacing: 0.4em; text-transform: uppercase; }
-.footer-sub { font-family: var(--font-body); font-size: 0.7rem; color: rgba(184,167,142,0.2); margin-top: 24px; letter-spacing: 0.05em; }
+/* ═══ FOOTER ═══ */
+.footer {
+  padding: 48px 24px; text-align: center;
+  border-top: 1px solid rgba(196,162,101,0.08);
+}
+.footer-title {
+  font-family: var(--font-body); font-size: 0.6rem; font-weight: 300;
+  color: var(--sand); letter-spacing: 0.35em; text-transform: uppercase;
+}
+.footer-sub {
+  font-family: var(--font-body); font-size: 0.55rem; font-weight: 300;
+  color: rgba(184,167,142,0.4); letter-spacing: 0.2em;
+  text-transform: uppercase; margin-top: 12px;
+}
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .nav { padding: 20px 24px; }
-  .nav-links { display: none !important; }
-  .nav-hamburger { display: block !important; }
-  .nav-wordmark-text { display: none; }
+/* ═══ SCROLL REVEAL ═══ */
+.reveal {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.12s; }
+.reveal-d2 { transition-delay: 0.24s; }
+.reveal-d3 { transition-delay: 0.36s; }
+.reveal-d4 { transition-delay: 0.48s; }
+.reveal-d5 { transition-delay: 0.60s; }
+
+/* ═══ 3D DEPTH & PARTICLES ═══ */
+.hero { perspective: 1200px; }
+.hero-content { transform-style: preserve-3d; }
+
+.depth-layer {
+  position: absolute; inset: 0; pointer-events: none;
+  transition: transform 0.15s ease-out;
+}
+
+.particles-canvas {
+  position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  opacity: 0.35;
+}
+
+.section-3d {
+  transform-style: preserve-3d; perspective: 800px;
+}
+.section-3d .reveal {
+  will-change: transform;
+}
+
+/* Parallax scroll depth for sections */
+.parallax-depth-1 { transform: translateZ(-1px) scale(2); }
+.parallax-depth-2 { transform: translateZ(-2px) scale(3); }
+
+/* Float animation for decorative elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-12px) rotate(1deg); }
+  66% { transform: translateY(6px) rotate(-0.5deg); }
+}
+.float-slow { animation: float 8s ease-in-out infinite; }
+.float-med { animation: float 6s ease-in-out infinite 1s; }
+
+/* Tilt card hover effect */
+.tilt-card {
+  transition: transform 0.4s ease;
+  transform-style: preserve-3d;
+}
+.tilt-card:hover {
+  transform: perspective(600px) rotateY(2deg) rotateX(-1deg) translateZ(8px);
+}
+
+/* Glowing stat numbers */
+.hero-stat-num.counting {
+  text-shadow: 0 0 30px rgba(196,162,101,0.3), 0 0 60px rgba(196,162,101,0.1);
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 900px) {
+  .features-grid { grid-template-columns: 1fr 1fr; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .hero-stats { gap: 32px; }
+}
+@media (max-width: 600px) {
   .features-grid { grid-template-columns: 1fr; }
   .gallery-grid { grid-template-columns: 1fr; }
-  .form-row { grid-template-columns: 1fr; }
-  .parallax { background-attachment: scroll; }
-  .sound-toggle { right: 24px; bottom: 32px; width: 42px; height: 42px; }
-  .section-story, .section-features, .section-details, .section-contact { padding: 100px 20px; }
-  .gallery-card { height: 320px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-field.full { grid-column: 1; }
+  .hero-stats { flex-direction: column; gap: 20px; }
+  .nav { padding: 16px 20px; }
+  .nav.scrolled { padding: 12px 20px; }
 }
 </style>
 </head>
 <body class="loading">
 
+<!-- ═══ PRELOADER ═══ -->
 <div class="preloader" id="preloader">
-  <div class="preloader-logo">Private Offering</div>
+  <div class="preloader-brand">Gamtoos Coast</div>
+  <div class="preloader-sub">Where Bush Meets the Sea</div>
   <div class="preloader-line"></div>
-  <div class="preloader-sub">South Africa</div>
 </div>
 
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<div class="grain"></div>
+<!-- ═══ FLOATING PARTICLES ═══ -->
+<canvas class="particles-canvas" id="particlesCanvas"></canvas>
 
+<!-- ═══ NAV ═══ -->
 <nav class="nav" id="nav">
-  <a href="#" class="nav-wordmark">
-    <span class="nav-wordmark-mark">PO</span>
-    <span class="nav-wordmark-text">Private Offering</span>
-  </a>
+  <a href="#" class="nav-brand">Gamtoos Coast</a>
   <div class="nav-links">
     <a href="#the-land" class="nav-link">The Land</a>
+    <a href="#conservation" class="nav-link">Conservation</a>
+    <a href="#landscape" class="nav-link">Landscape</a>
+    <a href="#heritage" class="nav-link">Heritage</a>
     <a href="#vision" class="nav-link">Vision</a>
-    <a href="#gallery" class="nav-link">Gallery</a>
-    <a href="#details" class="nav-link">Details</a>
     <a href="#enquire" class="nav-link">Enquire</a>
   </div>
-  <button class="nav-hamburger" id="menuOpen" aria-label="Open menu">☰</button>
+  <button class="nav-burger" id="menuOpen" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<div class="menu-overlay" id="mobileMenu">
-  <button class="menu-close" id="menuClose" aria-label="Close menu">✕</button>
+<!-- ═══ MOBILE MENU ═══ -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="menuClose" aria-label="Close menu">&times;</button>
   <a href="#the-land">The Land</a>
+  <a href="#conservation">Conservation</a>
+  <a href="#landscape">Landscape</a>
+  <a href="#heritage">Heritage</a>
   <a href="#vision">Vision</a>
-  <a href="#gallery">Gallery</a>
-  <a href="#details">Details</a>
   <a href="#enquire">Enquire</a>
 </div>
 
+<!-- ═══ SOUND TOGGLE ═══ -->
+<button class="sound-toggle" id="soundToggle">Sound Off</button>
+
+<!-- ═══════════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════════ -->
 <section class="hero">
-  <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="gallery-01-estate-enhanced.jpg">
+  <video class="hero-video" autoplay muted loop playsinline poster="">
     <source src="hero-video.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
-  <div class="hero-vignette"></div>
-  <div class="hero-top-line"></div>
+  <div class="hero-grain"></div>
   <div class="hero-content" id="heroContent">
-    <div class="hero-badge">─── South Africa ───</div>
-    <h1 class="hero-title">Where the Wild Still Owns the Horizon</h1>
-    <div class="rule rule-sm"></div>
-    <p class="hero-subtitle">An extraordinary parcel of untamed South African wilderness — yours to shape into legacy.</p>
-    <div style="margin-top: 56px;">
-      <a href="#the-land" class="btn"><span>Discover</span></a>
+    <h1 class="hero-title">Where Bush<br>Meets the Sea</h1>
+    <p class="hero-sub">1,433 hectares of pristine coastal wilderness &nbsp;·&nbsp; Eastern Cape, South Africa</p>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num" data-count="1433" data-format="comma">0</div>
+        <div class="hero-stat-label">Hectares</div>
+      </div>
+      <div>
+        <div class="hero-stat-num" data-count="6">0</div>
+        <div class="hero-stat-label">Ecosystems</div>
+      </div>
+      <div>
+        <div class="hero-stat-num" data-count="99" data-suffix="%">0</div>
+        <div class="hero-stat-label">Intact</div>
+      </div>
+      <div>
+        <div class="hero-stat-num" data-count="86">0</div>
+        <div class="hero-stat-label">Archaeological Sites</div>
+      </div>
     </div>
   </div>
-  <div class="hero-bottom-grad"></div>
-  <div class="hero-scroll"><div class="hero-scroll-line"></div></div>
-  <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-    </svg>
-    <div class="bar"></div>
-  </button>
+  <div class="hero-scroll"><span></span></div>
 </section>
 
-<section class="section-story" id="the-land">
+<!-- ═══════════════════════════════════════════════
+     THE LAND
+     ═══════════════════════════════════════════════ -->
+<section id="the-land" style="padding: 160px 24px; background: var(--charcoal);">
   <div class="reveal">
-    <div class="divider-ornament"><div class="divider-ornament-line"></div><span>◆</span><div class="divider-ornament-line"></div></div>
+    <div class="divider-ornament">
+      <div class="divider-ornament-line"></div><span>◆</span><div class="divider-ornament-line"></div>
+    </div>
   </div>
-  <h2 class="section-heading reveal reveal-d1" style="margin-top: 48px;">The Land Remembers</h2>
+  <div class="reveal reveal-d1">
+    <h2 class="section-heading" style="margin-top: 48px;">The Land Remembers</h2>
+  </div>
   <div class="rule reveal reveal-d2"></div>
-  <p class="story-text reveal reveal-d3">Long before borders were drawn, this land breathed with the rhythm of hooves on red earth, the slow arc of eagles overhead, and the ancient patience of baobabs rooted deep in story. It is a place where dawn arrives in gold and silence, where the bush exhales warmth into star-filled nights, and where every ridge reveals another world untouched by time.</p>
-</section>
-
-<section class="parallax" style="height: 50vh; background: linear-gradient(135deg, rgba(15,12,8,0.4), rgba(15,12,8,0.6)), linear-gradient(to right, var(--olive-dark), var(--earth), var(--rust));">
-  <div class="reveal" style="text-align: center;">
-    <p class="parallax-quote">"The earth has music for those who listen."</p>
-    <p class="parallax-attr">— Shakespeare</p>
+  <div class="reveal reveal-d3">
+    <p class="body-text" style="font-size: 1.15rem; line-height: 2.1; font-style: italic; font-family: var(--font-display);">
+      Stretched along the Eastern Cape coastline between the Kabeljous and Gamtoos estuaries, this is a landscape shaped by wind, tide, and centuries of solitude. Primary coastal dunes give way to dense thicket, open renosterveld, wetlands alive with birdcall, and estuarine flats where the river meets the Indian Ocean. It is a place where six distinct ecosystems converge within a single boundary — a mosaic of habitats so diverse that each ridge reveals a different world.
+    </p>
   </div>
 </section>
 
-<section class="section-features">
-  <div class="reveal"><h2 class="section-heading">What the Land Offers</h2><div class="rule"></div></div>
-  <div class="features-grid">
-    <div class="feature-card reveal"><div class="feature-icon">◆</div><h3 class="feature-title">Vast &amp; Varied Terrain</h3><p class="feature-desc">Sweeping plains give way to wooded valleys, seasonal rivers, and rocky outcrops — a mosaic of ecosystems within a single boundary.</p></div>
-    <div class="feature-card reveal reveal-d1"><div class="feature-icon">◇</div><h3 class="feature-title">Abundant Wildlife</h3><p class="feature-desc">Indigenous species roam freely across the property. The land supports a thriving, self-sustaining ecosystem shaped by centuries of natural balance.</p></div>
-    <div class="feature-card reveal reveal-d2"><div class="feature-icon">◈</div><h3 class="feature-title">Pristine Water Sources</h3><p class="feature-desc">Natural springs, seasonal waterways, and established dams provide year-round water — the lifeblood of any wilderness property.</p></div>
-    <div class="feature-card reveal reveal-d3"><div class="feature-icon">▣</div><h3 class="feature-title">Development Potential</h3><p class="feature-desc">Zoned for conservation, eco-tourism, or private game reserve use. Infrastructure access with the seclusion of true wilderness.</p></div>
+<!-- ═══ PARALLAX 1 ═══ -->
+<div class="parallax" style="background: linear-gradient(135deg, var(--ocean-deep), var(--olive-dark), var(--earth));">
+  <div class="parallax-overlay"></div>
+  <div class="parallax-content">
+    <div class="reveal">
+      <p style="font-family: var(--font-display); font-size: clamp(1.3rem, 3vw, 2rem); font-weight: 300; font-style: italic; color: var(--cream); max-width: 700px; line-height: 1.6;">
+        "Recognised for its conservation importance since the early 1980s — a landscape of irreplaceable habitats that has endured intact while the coastline around it has transformed."
+      </p>
+    </div>
   </div>
-</section>
+</div>
 
-<section class="parallax" style="height: 45vh; background: linear-gradient(to bottom, rgba(15,12,8,0.6), rgba(15,12,8,0.3), rgba(15,12,8,0.6)), linear-gradient(120deg, #2d3a22, #3d3225 40%, #5a3a20 70%, #2a2219);">
-  <div class="reveal" style="text-align: center; padding: 0 24px;">
-    <p class="parallax-quote" style="font-size: clamp(1.2rem, 2.5vw, 1.6rem); font-style: normal; letter-spacing: 0.03em;">A private game reserve. An eco-lodge for the world's most discerning travellers.<br>A conservation sanctuary. A family legacy.</p>
-    <p style="font-family: var(--font-body); font-size: 0.72rem; color: var(--gold); letter-spacing: 0.3em; text-transform: uppercase; margin-top: 28px;">The potential is yours to define</p>
-  </div>
-</section>
-
-<section id="vision" style="padding: 160px 24px; background: var(--charcoal);">
+<!-- ═══════════════════════════════════════════════
+     WHAT THE LAND OFFERS
+     ═══════════════════════════════════════════════ -->
+<section style="padding: 160px 24px; background: radial-gradient(ellipse at 0% 0%, rgba(74,90,58,0.08) 0%, transparent 50%), var(--charcoal);">
   <div class="reveal">
-    <div class="divider-ornament"><div class="divider-ornament-line"></div><span>◇</span><div class="divider-ornament-line"></div></div>
-    <h2 class="section-heading" style="margin-top: 48px;">A Canvas for Vision</h2>
+    <h2 class="section-heading">What the Land Holds</h2>
+    <div class="rule"></div>
   </div>
-  <div class="rule reveal reveal-d1"></div>
-  <p class="body-text reveal reveal-d2">This is not simply land for sale. It is an invitation to build something that endures. The infrastructure is accessible, the conservation credentials are established, and the natural beauty is beyond what any architect could design. What this land becomes next is a question only its new custodian can answer.</p>
+  <div class="features-grid">
+    <div class="feature-card tilt-card reveal">
+      <div class="feature-card-icon">◆</div>
+      <div class="feature-card-title">Coastal Dune Wilderness</div>
+      <div class="feature-card-desc">Towering primary sand dunes stretching the full length of the coastline — among the largest and most pristine on the Eastern Cape coast. They regulate sand movement, replenish the region's beaches, and shield inland areas from storm surges.</div>
+    </div>
+    <div class="feature-card tilt-card reveal reveal-d1">
+      <div class="feature-card-icon">◇</div>
+      <div class="feature-card-title">Two Estuaries</div>
+      <div class="feature-card-desc">The property borders the functional zones of both the Kabeljous estuary — a warm temperate, largely temporarily closed system — and the Gamtoos estuary, a predominantly open system. A network of coastal wetlands connects them hydrologically through the heart of the land.</div>
+    </div>
+    <div class="feature-card tilt-card reveal reveal-d2">
+      <div class="feature-card-icon">◆</div>
+      <div class="feature-card-title">Six Ecosystem Types</div>
+      <div class="feature-card-desc">Humansdorp Shale Renosterveld, Albany Alluvial Vegetation, St Francis Dune Thicket, Sundays Mesic Thicket, Cape Seashore Vegetation, and estuarine functional zones — an extraordinary convergence within a single property boundary.</div>
+    </div>
+    <div class="feature-card tilt-card reveal reveal-d3">
+      <div class="feature-card-icon">◇</div>
+      <div class="feature-card-title">Threatened Species</div>
+      <div class="feature-card-desc">Home to at least <span data-count="16">0</span> plant species and <span data-count="8">0</span> bird species of special conservation concern. Among them: Gasteria armstrongii, a critically endangered succulent known from a single population of just <span data-count="500">0</span> plants — found only on the renosterveld flats between Jeffreys Bay and the Gamtoos.</div>
+    </div>
+    <div class="feature-card tilt-card reveal reveal-d4">
+      <div class="feature-card-icon">◆</div>
+      <div class="feature-card-title">Horseback & Eco-Tourism</div>
+      <div class="feature-card-desc">The property currently supports horseback trail riding across the dunes and through the bush, alongside low-impact eco-tourism and livestock farming — activities that coexist with the land's conservation value and demonstrate its revenue potential.</div>
+    </div>
+    <div class="feature-card tilt-card reveal reveal-d5">
+      <div class="feature-card-icon">◇</div>
+      <div class="feature-card-title">Carbon & Water Services</div>
+      <div class="feature-card-desc">Extensive wetlands provide critical ecosystem services: clean water production, flood attenuation, drought buffering, and significant carbon sequestration. These are increasingly valuable assets in a world pricing natural capital.</div>
+    </div>
+  </div>
 </section>
 
-<section class="section-gallery" id="gallery">
+<!-- ═══════════════════════════════════════════════
+     CONSERVATION
+     ═══════════════════════════════════════════════ -->
+<section id="conservation" style="padding: 160px 24px; background: radial-gradient(ellipse at 100% 0%, rgba(26,58,74,0.1) 0%, transparent 50%), var(--charcoal);">
+  <div class="reveal">
+    <div class="divider-ornament">
+      <div class="divider-ornament-line"></div><span>◇</span><div class="divider-ornament-line"></div>
+    </div>
+    <h2 class="section-heading" style="margin-top: 48px;">Conservation Credentials</h2>
+    <div class="rule"></div>
+    <p class="body-text">
+      This is not land that needs its conservation case made. Every major biodiversity assessment conducted in the Eastern Cape over the past two decades has flagged this property as a priority. The property contains Critical Biodiversity Areas under both provincial and national frameworks, is classified as a High Spatial Priority by the Eastern Cape Protected Area Expansion Strategy, and sits within a Priority Focus Area under the National Protected Area Expansion Strategy. The independent assessment recommends Nature Reserve status — the highest category of biodiversity stewardship.
+    </p>
+  </div>
+
+  <div class="reveal reveal-d1" style="margin-top: 64px;">
+    <p class="body-text" style="font-size: 0.78rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 32px;">Wildlife on the Land</p>
+  </div>
+  <div class="species-cards">
+    <div class="species-card reveal" data-expandable>
+      <img class="species-card-img" src="black-harrier.jpg" alt="Black Harrier">
+      <div class="species-card-overlay"></div>
+      <div class="species-card-expand-icon">+</div>
+      <div class="species-card-header">
+        <div class="species-card-name">Black Harrier</div>
+        <div class="species-card-latin">Circus maurus</div>
+        <div class="species-card-status" style="color: #e67e22;">Endangered</div>
+      </div>
+      <div class="species-card-detail">
+        <div class="species-card-desc">One of the rarest raptors in southern Africa, with a global population of fewer than <span data-count="1000" data-format="comma">0</span> breeding pairs. This striking dark raptor hunts low over fynbos and renosterveld — exactly the habitat this property provides. Endemic to South Africa and Lesotho.</div>
+        <div class="species-card-meta">Endemic to Southern Africa</div>
+      </div>
+    </div>
+    <div class="species-card reveal reveal-d1" data-expandable>
+      <img class="species-card-img" src="secretary-bird.jpg" alt="Secretary Bird">
+      <div class="species-card-overlay"></div>
+      <div class="species-card-expand-icon">+</div>
+      <div class="species-card-header">
+        <div class="species-card-name">Secretary Bird</div>
+        <div class="species-card-latin">Sagittarius serpentarius</div>
+        <div class="species-card-status" style="color: #e67e22;">Endangered</div>
+      </div>
+      <div class="species-card-detail">
+        <div class="species-card-desc">An iconic African raptor that hunts on foot, stomping snakes and rodents in open grassland. Populations have declined by over <span data-count="80" data-suffix="%">0</span> in some regions due to habitat loss. The open renosterveld flats on this property provide ideal hunting ground.</div>
+        <div class="species-card-meta">Sub-Saharan Africa</div>
+      </div>
+    </div>
+    <div class="species-card reveal reveal-d2" data-expandable>
+      <img class="species-card-img" src="ec-dwarf-chameleon.jpg" alt="Eastern Cape Dwarf Chameleon">
+      <div class="species-card-overlay"></div>
+      <div class="species-card-expand-icon">+</div>
+      <div class="species-card-header">
+        <div class="species-card-name">Eastern Cape Dwarf Chameleon</div>
+        <div class="species-card-latin">Bradypodion ventrale</div>
+        <div class="species-card-status" style="color: var(--sand);">Endemic</div>
+      </div>
+      <div class="species-card-detail">
+        <div class="species-card-desc">Found nowhere else on Earth outside the Eastern Cape. This small, slow-moving reptile inhabits the dense coastal thicket and dune vegetation that covers much of the property. A living indicator of intact, undisturbed habitat.</div>
+        <div class="species-card-meta">Endemic to Eastern Cape</div>
+      </div>
+    </div>
+    <div class="species-card reveal" data-expandable>
+      <img class="species-card-img" src="caracal.jpg" alt="Caracal">
+      <div class="species-card-overlay"></div>
+      <div class="species-card-expand-icon">+</div>
+      <div class="species-card-header">
+        <div class="species-card-name">Caracal</div>
+        <div class="species-card-latin">Caracal caracal</div>
+        <div class="species-card-status" style="color: var(--sand);">Apex Predator</div>
+      </div>
+      <div class="species-card-detail">
+        <div class="species-card-desc">The largest small cat in Africa, a powerful and elusive predator of the coastal thicket. Caracals are a strong indicator of a healthy ecosystem — their presence confirms a functioning food chain from insects through to medium-sized prey.</div>
+        <div class="species-card-meta">Widespread but secretive</div>
+      </div>
+    </div>
+    <div class="species-card reveal reveal-d1" data-expandable>
+      <img class="species-card-img" src="denhams-bustard.jpg" alt="Denham's Bustard">
+      <div class="species-card-overlay"></div>
+      <div class="species-card-expand-icon">+</div>
+      <div class="species-card-header">
+        <div class="species-card-name">Denham's Bustard</div>
+        <div class="species-card-latin">Neotis denhami</div>
+        <div class="species-card-status" style="color: var(--sand);">Near Threatened</div>
+      </div>
+      <div class="species-card-detail">
+        <div class="species-card-desc">A large, ground-dwelling bird that relies on open grassland and renosterveld — habitat types under severe pressure from agriculture and development across South Africa. The intact flats on this property provide critical foraging ground.</div>
+        <div class="species-card-meta">Declining across range</div>
+      </div>
+    </div>
+    <div class="species-card reveal reveal-d2" data-expandable>
+      <img class="species-card-img" src="blue-duiker.jpg" alt="Blue Duiker">
+      <div class="species-card-overlay"></div>
+      <div class="species-card-expand-icon">+</div>
+      <div class="species-card-header">
+        <div class="species-card-name">Blue Duiker</div>
+        <div class="species-card-latin">Philantomba monticola</div>
+        <div class="species-card-status" style="color: var(--sand);">Thicket Specialist</div>
+      </div>
+      <div class="species-card-detail">
+        <div class="species-card-desc">Africa's smallest antelope, standing barely <span data-count="35" data-suffix="cm">0</span> at the shoulder. Extremely shy and rarely seen, it depends on dense, undisturbed thicket — the kind of continuous canopy cover that makes this property so ecologically valuable.</div>
+        <div class="species-card-meta">Indicator of intact forest</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top: 80px;">
+    <p class="body-text" style="font-size: 0.78rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 32px;">Threatened Flora — 16 Species of Conservation Concern</p>
+  </div>
+  <div class="flora-list reveal reveal-d1">
+    <div class="flora-item"><span class="flora-name">Gasteria armstrongii</span><span class="flora-status" style="color: #e74c3c;">Critically Endangered</span></div>
+    <div class="flora-item"><span class="flora-name">Agathosma gonaquensis</span><span class="flora-status" style="color: #e74c3c;">Critically Endangered</span></div>
+    <div class="flora-item"><span class="flora-name">Rapanea gilliana</span><span class="flora-status" style="color: #e67e22;">Endangered</span></div>
+    <div class="flora-item"><span class="flora-name">Brunsvigia litoralis</span><span class="flora-status" style="color: #e67e22;">Endangered</span></div>
+    <div class="flora-item"><span class="flora-name">Argyrolobium crassifolium</span><span class="flora-status" style="color: #e67e22;">Endangered</span></div>
+    <div class="flora-item"><span class="flora-name">Apodolirion macowanii</span><span class="flora-status" style="color: #f1c40f;">Vulnerable</span></div>
+    <div class="flora-item"><span class="flora-name">Trichodiadema aureum</span><span class="flora-status" style="color: #f1c40f;">Vulnerable</span></div>
+    <div class="flora-item"><span class="flora-name">Tulbaghia maritima</span><span class="flora-status" style="color: #f1c40f;">Vulnerable</span></div>
+    <div class="flora-item"><span class="flora-name">Agathosma stenopetala</span><span class="flora-status" style="color: #f1c40f;">Vulnerable</span></div>
+    <div class="flora-item"><span class="flora-name">Dioscorea sylvatica</span><span class="flora-status" style="color: #f1c40f;">Vulnerable</span></div>
+    <div class="flora-item"><span class="flora-name">Satyrium princeps</span><span class="flora-status" style="color: #f1c40f;">Vulnerable</span></div>
+    <div class="flora-item"><span class="flora-name">Gladiolus huttonii</span><span class="flora-status" style="color: #f1c40f;">Vulnerable</span></div>
+    <div class="flora-item"><span class="flora-name">Lotononis acuminata</span><span class="flora-status" style="color: #f1c40f;">Vulnerable</span></div>
+    <div class="flora-item"><span class="flora-name">Gymnosporia elliptica</span><span class="flora-status" style="color: #f1c40f;">Vulnerable</span></div>
+    <div class="flora-item"><span class="flora-name">Haworthiopsis fasciata</span><span class="flora-status" style="color: var(--sand);">Near Threatened</span></div>
+    <div class="flora-item"><span class="flora-name">Bergeranthus multiceps</span><span class="flora-status" style="color: var(--sand);">Data Deficient</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     THE LANDSCAPE (GALLERY)
+     ═══════════════════════════════════════════════ -->
+<section id="landscape" style="padding: 120px 24px 160px; background: radial-gradient(ellipse at 100% 100%, rgba(139,74,43,0.06) 0%, transparent 50%), var(--charcoal);">
   <div class="reveal">
     <h2 class="section-heading">The Landscape Speaks</h2>
     <div class="rule"></div>
-    <p class="body-text" style="font-size: 0.95rem; margin-bottom: 64px;">Each vista tells its own story — of ancient geology, thriving ecosystems, and unbroken wilderness.</p>
+    <p class="body-text" style="font-size: 0.95rem; margin-bottom: 64px;">
+      From renosterveld ridges to estuarine mudflats, every hectare tells its own story.
+    </p>
   </div>
   <div class="gallery-grid">
-    <div class="gallery-card reveal"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-01-estate-enhanced.jpg"><source src="clip-01-estate.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">The Estate</h3><p class="gallery-card-desc">The homestead sits within rolling green pastures that sweep down to six kilometres of unspoilt private coastline.</p></div></div>
-    <div class="gallery-card reveal reveal-d1"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-02-estuary-enhanced.jpg"><source src="clip-02-estuary.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">River Estuary</h3><p class="gallery-card-desc">A rare river-to-sea landholding where the estuary widens into a vast tidal system teeming with birdlife and marine species.</p></div></div>
-    <div class="gallery-card reveal reveal-d2"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-03-river-mouth-enhanced.jpg"><source src="clip-03-river-mouth.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">River Mouth</h3><p class="gallery-card-desc">Where the river meets the Indian Ocean — turquoise channels carve through golden sand in patterns that shift with each tide.</p></div></div>
-    <div class="gallery-card reveal reveal-d3"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-04-sandbars-enhanced.jpg"><source src="clip-04-sandbars.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">Ocean &amp; Sandbars</h3><p class="gallery-card-desc">Pristine sandbars and breaking surf along a coastline that remains untouched — no development, no crowds, no compromise.</p></div></div>
-    <div class="gallery-card reveal reveal-d4"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-05-coastline-enhanced.jpg"><source src="clip-05-coastline.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">Coastal Corridor</h3><p class="gallery-card-desc">Dense indigenous bush meets pristine beach in an unbroken corridor — the Eastern Cape's wild coast at its most dramatic.</p></div></div>
-    <div class="gallery-card reveal reveal-d5"><div class="gallery-card-bg"><video autoplay muted loop playsinline preload="none" poster="gallery-06-wide-estate-enhanced.jpg"><source src="clip-06-dunes.mp4" type="video/mp4"></video></div><div class="gallery-card-overlay"></div><div class="gallery-card-content"><h3 class="gallery-card-title">Dunes &amp; River</h3><p class="gallery-card-desc">Sculpted dune fields meet the river channel — a landscape of extraordinary scale where land, water, and ocean converge.</p></div></div>
-  </div>
-</section>
-
-<section class="section-details" id="details">
-  <div class="reveal"><h2 class="section-heading">At a Glance</h2><div class="rule"></div></div>
-  <div class="details-table reveal reveal-d1">
-    <div class="details-row"><span class="details-label">Location</span><span class="details-value">Available upon enquiry</span></div>
-    <div class="details-row"><span class="details-label">Total Area</span><span class="details-value">Available upon enquiry</span></div>
-    <div class="details-row"><span class="details-label">Terrain</span><span class="details-value">Mixed savannah, bushveld, valleys, watercourses</span></div>
-    <div class="details-row"><span class="details-label">Water</span><span class="details-value">Natural springs, seasonal rivers, established dams</span></div>
-    <div class="details-row"><span class="details-label">Wildlife</span><span class="details-value">Indigenous species — details upon request</span></div>
-    <div class="details-row"><span class="details-label">Access</span><span class="details-value">Road access with private entrance</span></div>
-    <div class="details-row"><span class="details-label">Zoning</span><span class="details-value">Conservation / eco-tourism / private use</span></div>
-    <div class="details-row"><span class="details-label">Title</span><span class="details-value">Freehold</span></div>
-  </div>
-  <p class="details-note reveal reveal-d2">Full property details, coordinates, and documentation are shared with qualified enquiries.</p>
-</section>
-
-<section class="parallax" style="height: 35vh; background: linear-gradient(to right, rgba(15,12,8,0.7), rgba(15,12,8,0.3), rgba(15,12,8,0.7)), linear-gradient(160deg, #2d3a22, #4a5a3a 30%, #3d3225 60%, #2a2219);">
-  <div class="reveal" style="text-align: center;">
-    <p class="parallax-quote" style="font-size: clamp(1.3rem, 2.5vw, 1.8rem);">Some land you buy. Some land chooses you.</p>
-  </div>
-</section>
-
-<section class="section-contact" id="enquire">
-  <div class="reveal">
-    <div class="divider-ornament"><div class="divider-ornament-line"></div><span>◈</span><div class="divider-ornament-line"></div></div>
-    <h2 class="section-heading" style="margin-top: 48px;">Private Viewing Request</h2>
-    <div class="rule"></div>
-    <p class="body-text">Opportunities of this magnitude and beauty are exceedingly rare. Share your details below and a member of our team will arrange a confidential conversation.</p>
-  </div>
-  <div class="contact-form reveal reveal-d2">
-    <div class="form-row">
-      <input type="text" class="input-field" placeholder="Full name" id="formName">
-      <input type="email" class="input-field" placeholder="Email address" id="formEmail">
+    <div class="gallery-card reveal">
+      <div class="gallery-card-bg">
+        <video autoplay muted loop playsinline>
+          <source src="clip-01-estate.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="gallery-card-overlay"></div>
+      <div class="gallery-card-content">
+        <div class="gallery-card-title">The Homestead</div>
+        <div class="gallery-card-desc">Set on elevated ground with views across the wetlands to the ocean — the beating heart of the property and its existing tourism operations.</div>
+      </div>
     </div>
-    <div class="form-row">
-      <input type="tel" class="input-field" placeholder="Phone (optional)" id="formPhone">
-      <select class="select-field" id="formIntent">
-        <option value="" disabled selected>Nature of interest</option>
-        <option value="private-reserve">Private Game Reserve</option>
-        <option value="eco-tourism">Eco-Tourism / Lodge Development</option>
-        <option value="conservation">Conservation Sanctuary</option>
-        <option value="investment">Investment Opportunity</option>
-        <option value="private-estate">Private Family Estate</option>
-        <option value="other">Other</option>
+    <div class="gallery-card reveal reveal-d1">
+      <div class="gallery-card-bg">
+        <video autoplay muted loop playsinline>
+          <source src="clip-02-estuary.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="gallery-card-overlay"></div>
+      <div class="gallery-card-content">
+        <div class="gallery-card-title">Gamtoos Estuary</div>
+        <div class="gallery-card-desc">A predominantly open warm-temperate estuary in near-natural condition — approximately <span data-count="160">0</span> hectares of estuarine functional zone border the property.</div>
+      </div>
+    </div>
+    <div class="gallery-card reveal reveal-d2">
+      <div class="gallery-card-bg">
+        <video autoplay muted loop playsinline>
+          <source src="clip-03-river-mouth.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="gallery-card-overlay"></div>
+      <div class="gallery-card-content">
+        <div class="gallery-card-title">River Mouth</div>
+        <div class="gallery-card-desc">Where freshwater meets the Indian Ocean — a dynamic interface that supports extraordinary biodiversity and drives critical estuarine processes.</div>
+      </div>
+    </div>
+    <div class="gallery-card reveal">
+      <div class="gallery-card-bg">
+        <video autoplay muted loop playsinline>
+          <source src="clip-04-sandbars.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="gallery-card-overlay"></div>
+      <div class="gallery-card-content">
+        <div class="gallery-card-title">Primary Dunes</div>
+        <div class="gallery-card-desc">The property's coastal sand dune system is a critical "Sand Process Area" — regulating sand movement and replenishing the beaches of the entire Jeffreys Bay region.</div>
+      </div>
+    </div>
+    <div class="gallery-card reveal reveal-d1">
+      <div class="gallery-card-bg">
+        <video autoplay muted loop playsinline>
+          <source src="clip-05-coastline.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="gallery-card-overlay"></div>
+      <div class="gallery-card-content">
+        <div class="gallery-card-title">Coastal Thicket</div>
+        <div class="gallery-card-desc">Dense St Francis Dune Thicket and Sundays Mesic Thicket interlace along the coast — lush, evergreen canopy alive with birdsong, chameleons, and small antelope.</div>
+      </div>
+    </div>
+    <div class="gallery-card reveal reveal-d2">
+      <div class="gallery-card-bg">
+        <video autoplay muted loop playsinline>
+          <source src="clip-06-dunes.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="gallery-card-overlay"></div>
+      <div class="gallery-card-content">
+        <div class="gallery-card-title">Renosterveld Flats</div>
+        <div class="gallery-card-desc">Humansdorp Shale Renosterveld — an Endangered ecosystem type that is 100% endemic to the Eastern Cape and currently Not Protected. This property holds <span data-count="415">0</span> intact hectares.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     HERITAGE
+     ═══════════════════════════════════════════════ -->
+<section id="heritage" style="padding: 160px 24px; background: var(--charcoal);">
+  <div class="reveal">
+    <div class="divider-ornament">
+      <div class="divider-ornament-line"></div><span>◆</span><div class="divider-ornament-line"></div>
+    </div>
+    <h2 class="section-heading" style="margin-top: 48px;">Deep Roots</h2>
+    <div class="rule"></div>
+    <p class="body-text">
+      This land carries the weight of deep human history. The Gamtoos people — a Khoekhoe clan whose name survives in the river — inhabited this coastline for centuries, living as pastoralists and hunter-gatherers between the estuaries. <span data-count="86">0</span> archaeological sites have been documented across the property: shell middens, stone-age artefacts, ceramic pottery, ostrich egg-shell beads, and burial sites. In 2008, the Gamtkwa Khoisan Council conducted the first pre-historic reburial ceremony in the Eastern Cape, returning <span data-count="600">0</span>-year-old human remains to the earth under a full moon on this land. A <span data-count="250">0</span>-year-old elephant tooth found nearby confirmed that megafauna once roamed these dunes.
+    </p>
+  </div>
+  <div class="heritage-items">
+    <div class="heritage-item reveal">
+      <div class="heritage-marker"></div>
+      <div>
+        <div class="heritage-era">Stone Age</div>
+        <div class="heritage-desc">Shell middens, lithic scatters, stone tools, and ostrich egg-shell beads document thousands of years of coastal foraging and habitation along this coastline. The Kabeljous estuary was a favoured gathering place for hunter-gatherers and early pastoralists.</div>
+      </div>
+    </div>
+    <div class="heritage-item reveal reveal-d1">
+      <div class="heritage-marker"></div>
+      <div>
+        <div class="heritage-era">The Gamtoos Nation</div>
+        <div class="heritage-desc">The Chamtouers — later anglicised to Gamtoos — were a Khoekhoe clan who gave their name to the river and the valley. They lived as pastoralists in confederal relationship with the Gonaqua Khoe and the Gqunukhwebe Xhosa, ranging across the land between the two estuaries.</div>
+      </div>
+    </div>
+    <div class="heritage-item reveal reveal-d2">
+      <div class="heritage-marker"></div>
+      <div>
+        <div class="heritage-era">1752</div>
+        <div class="heritage-desc">Ensign August Beutler of the Dutch East India Company met with the Khoisan Captain at the mouth of the Kabeljous River during an eight-month reconnaissance expedition from Cape Town. He erected a VOC monogram on an island in the river — the earliest recorded European contact at this exact location.</div>
+      </div>
+    </div>
+    <div class="heritage-item reveal reveal-d3">
+      <div class="heritage-marker"></div>
+      <div>
+        <div class="heritage-era">1799 – 1803</div>
+        <div class="heritage-desc">Captain Klaas Stuurman — born at the Gamtoos River mouth — led the "Gamtoos Nation" in a coalition with the Gqunukhwebe Xhosa in the Third Frontier War. His demand to the British: "Restore the country of which our fathers were despoiled by the Dutch, and we have nothing more to ask." After winning the war, the Crown granted Stuurman's people ownership of these lands.</div>
+      </div>
+    </div>
+    <div class="heritage-item reveal reveal-d4">
+      <div class="heritage-marker"></div>
+      <div>
+        <div class="heritage-era">1803 – 1830</div>
+        <div class="heritage-desc">After Klaas's death, his brother David turned the Gamtoos lands into a sanctuary for displaced Khoe people. He was imprisoned on Robben Island twice, escaped twice, and was eventually transported to New South Wales — the only Khoi leader exiled to Australia. His spirit was repatriated to Hankey in 2017.</div>
+      </div>
+    </div>
+    <div class="heritage-item reveal reveal-d5">
+      <div class="heritage-marker"></div>
+      <div>
+        <div class="heritage-era">2006 – Present</div>
+        <div class="heritage-desc">Professional archaeological surveys by Binneman documented <span data-count="85">0</span> sites across the property, with a further site recorded by Rogers in 2021. The conservation community has proposed naming the adjacent state land reserve the "Captain Klaas Stuurman Nature Reserve" — a recognition of the deep entanglement between this landscape and Khoe resistance history.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PARALLAX 2 ═══ -->
+<div class="parallax" style="background: linear-gradient(135deg, var(--olive-dark), var(--ocean), var(--earth));">
+  <div class="parallax-overlay"></div>
+  <div class="parallax-content">
+    <div class="reveal">
+      <p style="font-family: var(--font-body); font-size: 0.65rem; color: var(--gold); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 24px;">Assessment Recommendation</p>
+      <p style="font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.8rem); font-weight: 300; color: var(--cream); max-width: 700px; line-height: 1.4;">
+        Nature Reserve Status
+      </p>
+      <p style="font-family: var(--font-body); font-size: 0.82rem; font-weight: 300; color: var(--sand); max-width: 560px; line-height: 1.75; margin-top: 20px;">
+        The independent conservation assessment by Dr Wentzel Coetzer of Conservation Outcomes recommends the highest category of biodiversity stewardship — a recognition of the property's irreplaceable ecological value.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     VISION
+     ═══════════════════════════════════════════════ -->
+<section id="vision" style="padding: 160px 24px; background: var(--charcoal);">
+  <div class="reveal">
+    <div class="divider-ornament">
+      <div class="divider-ornament-line"></div><span>◇</span><div class="divider-ornament-line"></div>
+    </div>
+    <h2 class="section-heading" style="margin-top: 48px;">A Vision Larger Than the Land</h2>
+  </div>
+  <div class="rule reveal reveal-d1"></div>
+  <div class="reveal reveal-d2">
+    <p class="body-text">
+      The property borders two areas of state-owned land that have been earmarked for conservation since the 1990s — Papiesfontein State Land and the Kabeljous Nature Reserve. Together, they present the opportunity to establish a greater coastal Protected Area stretching unbroken from the Kabeljous estuary to the Gamtoos estuary. The property sits within the Baviaans Macro-Ecological Corridor, connecting the Baviaanskloof Mega-Reserve complex with the coast. It is a keystone piece in a conservation jigsaw that has been waiting decades to be completed.
+    </p>
+  </div>
+  <div class="reveal reveal-d3" style="margin-top: 48px;">
+    <p class="body-text">
+      For a custodian with vision, this is more than a land acquisition. It is the chance to anchor a landscape-scale conservation legacy — one that protects endangered ecosystems, secures threatened species, preserves an extraordinary archaeological record, and generates sustainable revenue through eco-tourism in one of South Africa's most sought-after coastal regions.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     ENQUIRE
+     ═══════════════════════════════════════════════ -->
+<section id="enquire" class="form-section">
+  <div class="reveal">
+    <h2 class="section-heading">Begin the Conversation</h2>
+    <div class="rule"></div>
+    <p class="body-text" style="font-size: 0.82rem;">
+      All enquiries are handled in strict confidence. Detailed information — including the full conservation assessment, property survey, and archaeological reports — is available to qualified parties.
+    </p>
+  </div>
+  <div class="form-grid reveal reveal-d1">
+    <div class="form-field">
+      <label class="form-label">Name</label>
+      <input type="text" class="form-input" id="formName" placeholder="Your full name">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-input" id="formEmail" placeholder="your@email.com">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Phone</label>
+      <input type="tel" class="form-input" id="formPhone" placeholder="+27...">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Interest</label>
+      <select class="form-select" id="formIntent">
+        <option value="">Select your interest</option>
+        <option>Private conservation / Nature Reserve</option>
+        <option>Eco-tourism development</option>
+        <option>Agricultural / mixed use</option>
+        <option>Investment / holding</option>
+        <option>Other</option>
       </select>
     </div>
-    <textarea class="input-field" placeholder="Any additional details or questions" rows="4" id="formMessage"></textarea>
-    <div style="text-align: center; margin-top: 16px;">
-      <button class="btn" id="submitBtn"><span>Request Private Viewing</span></button>
+    <div class="form-field full">
+      <label class="form-label">Message</label>
+      <textarea class="form-textarea" id="formMessage" placeholder="Tell us about your vision for the land..."></textarea>
     </div>
-    <p style="font-family: var(--font-body); font-size: 0.7rem; color: rgba(184,167,142,0.35); text-align: center; margin-top: 16px; letter-spacing: 0.05em;">All enquiries are treated in the strictest confidence.</p>
+    <button class="btn-submit" id="submitBtn">Submit Enquiry</button>
   </div>
 </section>
 
+<!-- ═══ FOOTER ═══ -->
 <footer class="footer">
-  <div class="footer-title">✦ &nbsp; Private Land Offering &nbsp; · &nbsp; South Africa &nbsp; ✦</div>
+  <div class="footer-title">✦ &nbsp; Gamtoos Coast &nbsp; · &nbsp; 1,433 Hectares &nbsp; · &nbsp; Eastern Cape, South Africa &nbsp; ✦</div>
   <div class="footer-sub">Enquiries handled in strict confidence</div>
 </footer>
 
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════════ -->
 <script>
+// ── Preloader ──
 window.addEventListener('load', function() {
   setTimeout(function() {
     document.getElementById('preloader').classList.add('done');
     document.body.classList.remove('loading');
-  }, 4400);
+  }, 2200);
 });
 
-var dot = document.getElementById('cursorDot');
-var ring = document.getElementById('cursorRing');
-if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  var mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', function(e) {
-    mx = e.clientX; my = e.clientY;
-    dot.style.transform = 'translate(' + (mx - 3) + 'px, ' + (my - 3) + 'px)';
-  });
-  (function follow() {
-    rx += (mx - rx) * 0.45; ry += (my - ry) * 0.45;
-    ring.style.transform = 'translate(' + rx + 'px, ' + ry + 'px)';
-    requestAnimationFrame(follow);
-  })();
-  document.querySelectorAll('a, button, .gallery-card, .btn, .feature-card, select').forEach(function(el) {
-    el.addEventListener('mouseenter', function() { ring.classList.add('hovering'); });
-    el.addEventListener('mouseleave', function() { ring.classList.remove('hovering'); });
-  });
-}
-
+// ── Nav scroll + hero fade ──
 var nav = document.getElementById('nav');
 var heroContent = document.getElementById('heroContent');
 window.addEventListener('scroll', function() {
@@ -401,33 +1084,29 @@ window.addEventListener('scroll', function() {
   heroContent.style.opacity = Math.max(0, 1 - y / 700);
 }, { passive: true });
 
+// ── Scroll reveal ──
 var observer = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
 }, { threshold: 0.15 });
 document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
 
-// Lazy-load gallery videos: play when visible, pause when not
-var vidObserver = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    var vid = entry.target;
-    if (entry.isIntersecting) {
-      vid.play().catch(function() {});
-    } else {
-      vid.pause();
-    }
-  });
-}, { threshold: 0.25 });
-document.querySelectorAll('.gallery-card-bg video').forEach(function(v) { vidObserver.observe(v); });
-
+// ── Mobile menu ──
 var mobileMenu = document.getElementById('mobileMenu');
 document.getElementById('menuOpen').addEventListener('click', function() { mobileMenu.classList.add('open'); });
 document.getElementById('menuClose').addEventListener('click', function() { mobileMenu.classList.remove('open'); });
-mobileMenu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { mobileMenu.classList.remove('open'); }); });
+mobileMenu.querySelectorAll('a').forEach(function(a) {
+  a.addEventListener('click', function() { mobileMenu.classList.remove('open'); });
+});
 
+// ── Sound toggle ──
 var soundBtn = document.getElementById('soundToggle');
 var heroVideo = document.querySelector('.hero-video');
 
-// Ensure muted property is set (some browsers ignore the HTML attribute)
 heroVideo.muted = true;
 heroVideo.setAttribute('muted', '');
 heroVideo.setAttribute('playsinline', '');
@@ -436,7 +1115,6 @@ function tryPlay() {
   var p = heroVideo.play();
   if (p !== undefined) {
     p.catch(function() {
-      // Still blocked — play on first user interaction
       ['click','touchstart','scroll'].forEach(function(evt) {
         document.addEventListener(evt, function handler() {
           heroVideo.muted = true;
@@ -450,14 +1128,16 @@ function tryPlay() {
   }
 }
 
-if (heroVideo.readyState >= 2) {
-  tryPlay();
-} else {
-  heroVideo.addEventListener('loadeddata', tryPlay);
-}
+if (heroVideo.readyState >= 2) { tryPlay(); }
+else { heroVideo.addEventListener('loadeddata', tryPlay); }
 
-soundBtn.addEventListener('click', function() { heroVideo.muted = !heroVideo.muted; soundBtn.classList.toggle('unmuted', !heroVideo.muted); });
+soundBtn.addEventListener('click', function() {
+  heroVideo.muted = !heroVideo.muted;
+  soundBtn.classList.toggle('unmuted', !heroVideo.muted);
+  soundBtn.textContent = heroVideo.muted ? 'Sound Off' : 'Sound On';
+});
 
+// ── Form submit ──
 document.getElementById('submitBtn').addEventListener('click', function() {
   var name = document.getElementById('formName').value.trim();
   var email = document.getElementById('formEmail').value.trim();
@@ -469,6 +1149,172 @@ document.getElementById('submitBtn').addEventListener('click', function() {
   document.getElementById('formIntent').selectedIndex = 0;
   document.getElementById('formMessage').value = '';
 });
+
+// ── Counting Animation (generic) ──
+function animateCount(el) {
+  if (el.getAttribute('data-counted')) return;
+  el.setAttribute('data-counted', '1');
+  var target = parseInt(el.getAttribute('data-count'));
+  var suffix = el.getAttribute('data-suffix') || '';
+  var prefix = el.getAttribute('data-prefix') || '';
+  var useComma = el.getAttribute('data-format') === 'comma';
+  var duration = parseInt(el.getAttribute('data-duration')) || 2000;
+  var start = performance.now();
+  el.classList.add('counting');
+
+  function easeOutExpo(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+
+  function step(now) {
+    var progress = Math.min((now - start) / duration, 1);
+    var value = Math.round(easeOutExpo(progress) * target);
+    if (useComma) {
+      el.textContent = prefix + value.toLocaleString() + suffix;
+    } else {
+      el.textContent = prefix + value + suffix;
+    }
+    if (progress < 1) requestAnimationFrame(step);
+    else el.classList.remove('counting');
+  }
+  requestAnimationFrame(step);
+}
+
+// Trigger hero stats after they fade in (CSS animation starts at 3.1s)
+setTimeout(function() {
+  var heroNums = document.querySelectorAll('.hero-stat-num[data-count]');
+  heroNums.forEach(function(el, i) {
+    setTimeout(function() { animateCount(el); }, i * 300);
+  });
+}, 3600);
+
+// For all other numbers: trigger when parent section scrolls into view
+var countObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      var counters = entry.target.querySelectorAll('[data-count]');
+      counters.forEach(function(el, i) {
+        setTimeout(function() { animateCount(el); }, i * 200);
+      });
+      countObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+// Observe sections and cards that contain count-up numbers (not the hero)
+document.querySelectorAll('section, .parallax, .feature-card, .gallery-card-content, .heritage-item').forEach(function(section) {
+  if (section.querySelectorAll('[data-count]').length > 0 && !section.closest('.hero')) {
+    countObserver.observe(section);
+  }
+});
+
+// Expandable species cards — trigger counting inside detail panel on expand
+document.querySelectorAll('[data-expandable]').forEach(function(card) {
+  card.addEventListener('click', function() {
+    card.classList.toggle('expanded');
+    if (card.classList.contains('expanded')) {
+      var counters = card.querySelectorAll('[data-count]');
+      counters.forEach(function(el, i) {
+        setTimeout(function() { animateCount(el); }, i * 200);
+      });
+    }
+  });
+});
+
+// ── Floating Particles ──
+(function() {
+  var canvas = document.getElementById('particlesCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var particleCount = 40;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (var i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: -Math.random() * 0.4 - 0.1,
+      radius: Math.random() * 1.5 + 0.5,
+      opacity: Math.random() * 0.4 + 0.1,
+      pulse: Math.random() * Math.PI * 2
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.pulse += 0.02;
+      var alpha = p.opacity * (0.6 + 0.4 * Math.sin(p.pulse));
+
+      if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+      if (p.x < -10) p.x = canvas.width + 10;
+      if (p.x > canvas.width + 10) p.x = -10;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(196,162,101,' + alpha + ')';
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── Mouse Parallax on Hero ──
+(function() {
+  var hero = document.querySelector('.hero');
+  var content = document.getElementById('heroContent');
+  if (!hero || !content || !window.matchMedia('(hover: hover)').matches) return;
+
+  hero.addEventListener('mousemove', function(e) {
+    var rect = hero.getBoundingClientRect();
+    var cx = (e.clientX - rect.left) / rect.width - 0.5;
+    var cy = (e.clientY - rect.top) / rect.height - 0.5;
+    content.style.transform =
+      'translate3d(' + (cx * -15) + 'px, ' + (cy * -10) + 'px, 0) ' +
+      'rotateY(' + (cx * 1.5) + 'deg) rotateX(' + (cy * -1) + 'deg)';
+  });
+
+  hero.addEventListener('mouseleave', function() {
+    content.style.transform = 'translate3d(0, 0, 0) rotateY(0deg) rotateX(0deg)';
+    content.style.transition = 'transform 0.6s ease';
+    setTimeout(function() { content.style.transition = ''; }, 600);
+  });
+})();
+
+// ── Scroll Depth Parallax ──
+(function() {
+  var parallaxSections = document.querySelectorAll('.parallax');
+  var featureCards = document.querySelectorAll('.feature-card');
+  var galleryCards = document.querySelectorAll('.gallery-card');
+
+  function onScroll() {
+    var scrollY = window.scrollY;
+    var vh = window.innerHeight;
+
+    parallaxSections.forEach(function(section) {
+      var rect = section.getBoundingClientRect();
+      if (rect.top < vh && rect.bottom > 0) {
+        var progress = (vh - rect.top) / (vh + rect.height);
+        var inner = section.querySelector('.parallax-content');
+        if (inner) {
+          inner.style.transform = 'translateY(' + ((progress - 0.5) * -40) + 'px)';
+        }
+      }
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
 </script>
 </body>
 </html>

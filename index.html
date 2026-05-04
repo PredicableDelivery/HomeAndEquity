@@ -11,7 +11,7 @@
 <meta property="og:title" content="Where Bush Meets the Sea — Gamtoos Coast">
 <meta property="og:description" content="1,433 hectares of pristine coastal wilderness between the Kabeljous and Gamtoos estuaries. Six ecosystems. 99% intact. Eastern Cape, South Africa.">
 <meta property="og:image" content="og-image.jpg">
-<meta property="og:url" content="https://gamtooscoast.co.za">
+<meta property="og:url" content="https://www.gamtooscoast.co.za">
 <meta property="og:site_name" content="Gamtoos Coast">
 
 <!-- Twitter Card -->
@@ -590,8 +590,8 @@ a, button, .gallery-card, .btn-submit, .feature-card, select { cursor: pointer; 
   "@type": "RealEstateListing",
   "name": "Gamtoos Coast — Pristine Coastal Wilderness",
   "description": "1,433 hectares of pristine coastal wilderness between the Kabeljous and Gamtoos estuaries. Six ecosystems. 99% intact. Eastern Cape, South Africa.",
-  "url": "https://gamtooscoast.co.za",
-  "image": "https://gamtooscoast.co.za/og-image.jpg",
+  "url": "https://www.gamtooscoast.co.za",
+  "image": "https://www.gamtooscoast.co.za/og-image.jpg",
   "address": {
     "@type": "PostalAddress",
     "addressRegion": "Eastern Cape",
@@ -1098,12 +1098,13 @@ a, button, .gallery-card, .btn-submit, .feature-card, select { cursor: pointer; 
   </div>
 
   <!-- Netlify Form -->
-  <form id="enquiryForm" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="form-grid reveal reveal-d1">
-    <!-- Honeypot (spam prevention — hidden from humans) -->
-    <p style="display:none;">
-      <label>Don't fill this out: <input name="bot-field"></label>
-    </p>
-    <input type="hidden" name="form-name" value="enquiry">
+  <form id="enquiryForm" class="form-grid reveal reveal-d1">
+    <!-- Web3Forms: get your free access key at web3forms.com -->
+    <input type="hidden" name="access_key" value="fb05e2b6-f05b-4870-b597-dbdcc5fbbc0a">
+    <input type="hidden" name="subject" value="New Enquiry — Gamtoos Coast">
+    <input type="hidden" name="from_name" value="Gamtoos Coast Website">
+    <!-- Honeypot spam prevention -->
+    <input type="checkbox" name="botcheck" style="display:none;">
 
     <div class="form-field">
       <label class="form-label" for="formName">Name</label>
@@ -1250,7 +1251,7 @@ soundBtn.addEventListener('click', function() {
   else { fadeAudioIn(); }
 });
 
-// ── Form submit (Netlify Forms via AJAX) ──
+// ── Form submit (Web3Forms) ──
 var form = document.getElementById('enquiryForm');
 var submitBtn = document.getElementById('submitBtn');
 var formSuccess = document.getElementById('formSuccess');
@@ -1266,19 +1267,22 @@ form.addEventListener('submit', function(e) {
   submitBtn.style.opacity = '0.5';
 
   var formData = new FormData(form);
+  var jsonData = {};
+  formData.forEach(function(value, key) { jsonData[key] = value; });
 
-  fetch('/', {
+  fetch('https://api.web3forms.com/submit', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(formData).toString()
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(jsonData)
   })
-  .then(function(response) {
-    if (response.ok) {
+  .then(function(response) { return response.json(); })
+  .then(function(data) {
+    if (data.success) {
       form.style.display = 'none';
       formSuccess.style.display = 'block';
       formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
-      throw new Error('Network response was not ok');
+      throw new Error('Submission failed');
     }
   })
   .catch(function() {
